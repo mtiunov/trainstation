@@ -115,7 +115,7 @@ class JourneySerializer(serializers.ModelSerializer):
 
 class JourneyListSerializer(JourneySerializer):
     train_name = serializers.CharField(source="train.name", read_only=True)
-    route = serializers.StringRelatedField(read_only=True)
+    route_name = serializers.StringRelatedField(read_only=True)
     tickets_available = serializers.IntegerField(read_only=True)
 
     class Meta:
