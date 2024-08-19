@@ -41,9 +41,7 @@ class TrainSerializer(serializers.ModelSerializer):
 
 
 class TrainListSerializer(TrainSerializer):
-    train_capacity = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
-    )
+    train_capacity = serializers.SerializerMethodField()
 
     class Meta:
         model = Train
@@ -53,12 +51,16 @@ class TrainListSerializer(TrainSerializer):
             "train_type",
             "train_capacity",
         )
+
+    def get_train_capacity(self, obj) -> int:
+        return obj.capacity
 
 
 class TrainDetailSerializer(TrainSerializer):
     train_type = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
     )
+    train_capacity = serializers.SerializerMethodField()
 
     class Meta:
         model = Train
@@ -68,6 +70,9 @@ class TrainDetailSerializer(TrainSerializer):
             "train_type",
             "train_capacity",
         )
+
+    def get_train_capacity(self, obj) -> int:
+        return obj.capacity
 
 
 class StationSerializer(serializers.ModelSerializer):
@@ -165,7 +170,7 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = ("id", "cargo", "seat", "journey")
 
 
-class TicketListSerializer(serializers.ModelSerializer):
+class TicketListSerializer(TicketSerializer):
     journey = JourneyListSerializer(many=False, read_only=True)
 
 
