@@ -3,6 +3,8 @@ from datetime import datetime
 from rest_framework import viewsets, mixins
 from rest_framework.viewsets import GenericViewSet
 from django.db.models import F, Count
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from station.permissions import IsAdminOrIfAuthenticatedReadOnly
@@ -96,6 +98,23 @@ class TrainViewSet(
 
         return TrainSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                type=OpenApiTypes.STR,
+                description="Filter by train name (ex. ?name=Freight Express)",
+            ),
+            OpenApiParameter(
+                "train_type",
+                type=OpenApiTypes.STR,
+                description="Filter by train_type (ex. ?train_type=Local)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class StationViewSet(
     mixins.ListModelMixin,
@@ -131,12 +150,10 @@ class RouteViewSet(
         queryset = self.queryset
 
         if source:
-            source_ids = self._params_to_ints(source)
-            queryset = queryset.filter(name__icontains=source_ids)
+            queryset = queryset.filter(source__icontains=source)
 
         if destination:
-            destination_ids = self._params_to_ints(destination)
-            queryset = queryset.filter(genres__id__in=destination_ids)
+            queryset = queryset.filter(destination__icontains=destination)
 
         return queryset.distinct()
 
@@ -148,6 +165,23 @@ class RouteViewSet(
             return RouteDetailSerializer
 
         return RouteSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "source",
+                type=OpenApiTypes.STR,
+                description="Filter by source (ex. ?source=Kharkov Passenger)",
+            ),
+            OpenApiParameter(
+                "destination",
+                type=OpenApiTypes.STR,
+                description="Filter by destination (ex. ?destination=Lviv Railway Station)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class JourneyViewSet(viewsets.ModelViewSet):
@@ -200,6 +234,45 @@ class JourneyViewSet(viewsets.ModelViewSet):
             return JourneyDetailSerializer
 
         return JourneySerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "train_type",
+                type=OpenApiTypes.STR,
+                description="Filter by train (ex. ?train_type=Express)",
+            ),
+            OpenApiParameter(
+                "from_station",
+                type=OpenApiTypes.STR,
+                description="Filter by from (ex. ?from_station=Kyiv Train Station)",
+            ),
+            OpenApiParameter(
+                "to_station",
+                type=OpenApiTypes.STR,
+                description="Filter by to (ex. ?to_station=Kharkov Passenger)",
+            ),
+            OpenApiParameter(
+                "departure",
+                type=OpenApiTypes.DATE,
+                description=(
+                        "Filter by datetime of departure"
+                        "(ex. ?date=2024-08-20)"
+                ),
+            ),
+            OpenApiParameter(
+                "arrival",
+                type=OpenApiTypes.DATE,
+                description=(
+                        "Filter by datetime of arrival"
+                        "ex. ?date=2024-08-21)"
+                ),
+            ),
+        ]
+    )
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class OrderPagination(PageNumberPagination):
