@@ -75,6 +75,12 @@ class TrainDetailSerializer(TrainSerializer):
         return obj.capacity
 
 
+class TrainImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Train
+        fields = ("id", "image")
+
+
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station

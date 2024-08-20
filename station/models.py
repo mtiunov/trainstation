@@ -1,3 +1,6 @@
+import os
+import uuid
+from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
@@ -22,10 +25,18 @@ class TrainType(models.Model):
         return self.name
 
 
+def train_image_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("uploads/train/", filename)
+
+
 class Train(models.Model):
     name = models.CharField(max_length=255)
     cargo_num = models.PositiveIntegerField()
     places_in_cargo = models.PositiveIntegerField()
+    image = models.ImageField(null=True, upload_to=train_image_file_path)
     train_type = models.ForeignKey(
         TrainType,
         related_name="trains",
