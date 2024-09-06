@@ -92,23 +92,26 @@ class RouteSerializer(serializers.ModelSerializer):
         model = Route
         fields = ("id", "source", "destination", "distance")
 
+    def validate(self, attrs):
+        if attrs['source'] == attrs['destination']:
+            raise serializers.ValidationError(
+                "Source can't be equal to Destination"
+            )
+        return attrs
+
 
 class RouteListSerializer(RouteSerializer):
     source = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
+        read_only=True, slug_field="name"
     )
     destination = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
+        read_only=True, slug_field="name"
     )
 
 
 class RouteDetailSerializer(RouteSerializer):
-    source = RouteSerializer(many=True, read_only=True)
-    destination = RouteSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Route
-        fields = ("id", "source", "destination", "distance")
+    source = StationSerializer(read_only=True)
+    destination = StationSerializer(read_only=True)
 
 
 class JourneySerializer(serializers.ModelSerializer):

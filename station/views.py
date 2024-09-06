@@ -158,6 +158,7 @@ class RouteViewSet(
 ):
     queryset = Route.objects.select_related("source", "destination")
     serializer_class = RouteSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     @staticmethod
     def _params_to_ints(qs):
@@ -172,10 +173,10 @@ class RouteViewSet(
         queryset = self.queryset
 
         if source:
-            queryset = queryset.filter(source__icontains=source)
+            queryset = queryset.filter(source_id=source)
 
         if destination:
-            queryset = queryset.filter(destination__icontains=destination)
+            queryset = queryset.filter(destination_id=destination)
 
         return queryset.distinct()
 
