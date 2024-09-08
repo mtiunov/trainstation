@@ -58,7 +58,7 @@ class TrainListSerializer(TrainSerializer):
 
 class TrainDetailSerializer(TrainSerializer):
     train_type = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
+        read_only=True, slug_field="name"
     )
     train_capacity = serializers.SerializerMethodField()
 

@@ -43,7 +43,7 @@ from station.serializers import (
 class CrewViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
-    GenericViewSet,
+    GenericViewSet
 ):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
@@ -51,9 +51,9 @@ class CrewViewSet(
 
 
 class TrainTypeViewSet(
-    mixins.CreateModelMixin,
     mixins.ListModelMixin,
-    GenericViewSet,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
 ):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
@@ -65,7 +65,7 @@ class TrainViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    viewsets.GenericViewSet,
+    viewsets.GenericViewSet
 ):
     queryset = Train.objects.select_related("train_type")
     serializer_class = TrainSerializer
@@ -143,7 +143,7 @@ class StationViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet,
+    viewsets.GenericViewSet
 ):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
@@ -154,7 +154,7 @@ class RouteViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet,
+    viewsets.GenericViewSet
 ):
     queryset = Route.objects.select_related("source", "destination")
     serializer_class = RouteSerializer
@@ -305,7 +305,7 @@ class OrderPagination(PageNumberPagination):
 class OrderViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
-    GenericViewSet,
+    GenericViewSet
 ):
     queryset = Order.objects.prefetch_related(
         "tickets__journey__route__source",
