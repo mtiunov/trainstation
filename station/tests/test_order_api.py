@@ -96,7 +96,7 @@ class UnauthenticatedOrderApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AuthenticatedCrewApiTests(TestCase):
+class AuthenticatedOrderApiTests(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(

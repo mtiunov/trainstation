@@ -56,7 +56,7 @@ def detail_url(train_id):
     return reverse("station:train-detail", args=[train_id])
 
 
-class UnauthenticatedStationApiTest(TestCase):
+class UnauthenticatedTrainApiTest(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
 
@@ -65,7 +65,7 @@ class UnauthenticatedStationApiTest(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AuthenticatedRouteApiTest(TestCase):
+class AuthenticatedTrainApiTest(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         self.user = sample_user()
