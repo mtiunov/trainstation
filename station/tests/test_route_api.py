@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 from station.models import Route, Station
-from station.serializers import RouteSerializer, RouteListSerializer, RouteDetailSerializer
+from station.serializers import RouteListSerializer, RouteDetailSerializer
 
 
 def sample_user(**params):
