@@ -126,6 +126,17 @@ class JourneySerializer(serializers.ModelSerializer):
             "crew",
         )
 
+    def validate(self, attrs):
+        departure_time = attrs.get("departure_time")
+        arrival_time = attrs.get("arrival_time")
+
+        if departure_time and arrival_time and departure_time >= arrival_time:
+            raise serializers.ValidationError(
+                "Departure time can't be bigger than arrival time"
+            )
+
+        return attrs
+
 
 class JourneyListSerializer(JourneySerializer):
     train_name = serializers.CharField(source="train.name", read_only=True)

@@ -12,6 +12,7 @@ from station.serializers import TrainTypeSerializer
 def sample_user(**params):
     defaults = {
         "email": "user@user.com",
+        "password": "test1234",
         "first_name": "Bill",
         "last_name": "Gates"
     }
