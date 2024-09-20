@@ -199,7 +199,10 @@ class RouteViewSet(
             OpenApiParameter(
                 "destination",
                 type=OpenApiTypes.STR,
-                description="Filter by destination (ex. ?destination=Lviv Railway Station)",
+                description=(
+                    "Filter by destination "
+                    "(ex. ?destination=Lviv Railway Station)"
+                ),
             ),
         ]
     )
@@ -213,8 +216,8 @@ class JourneyViewSet(viewsets.ModelViewSet):
         .select_related("route__source", "route__destination", "train")
         .annotate(
             tickets_available=(
-                    F("train__cargo_num") * F("train__places_in_cargo")
-                    - Count("tickets")
+                F("train__cargo_num") * F("train__places_in_cargo")
+                - Count("tickets")
             )
         )
     )
@@ -234,10 +237,14 @@ class JourneyViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(train__train_type__icontains=train_type)
 
         if from_station:
-            queryset = queryset.filter(route__source__name__icontains=from_station)
+            queryset = queryset.filter(
+                route__source__name__icontains=from_station
+            )
 
         if to_station:
-            queryset = queryset.filter(route__destination__name__icontains=to_station)
+            queryset = queryset.filter(
+                route__destination__name__icontains=to_station
+            )
 
         if departure:
             departure_time = datetime.strptime(departure, "%Y-%m-%d")
@@ -268,27 +275,33 @@ class JourneyViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 "from_station",
                 type=OpenApiTypes.STR,
-                description="Filter by from (ex. ?from_station=Kyiv Train Station)",
+                description=(
+                    "Filter by from "
+                    "(ex. ?from_station=Kyiv Train Station)"
+                ),
             ),
             OpenApiParameter(
                 "to_station",
                 type=OpenApiTypes.STR,
-                description="Filter by to (ex. ?to_station=Kharkov Passenger)",
+                description=(
+                    "Filter by to "
+                    "(ex. ?to_station=Kharkov Passenger)"
+                ),
             ),
             OpenApiParameter(
                 "departure",
                 type=OpenApiTypes.DATE,
                 description=(
-                        "Filter by datetime of departure"
-                        "(ex. ?date=2024-08-20)"
+                    "Filter by datetime of departure"
+                    "(ex. ?date=2024-08-20)"
                 ),
             ),
             OpenApiParameter(
                 "arrival",
                 type=OpenApiTypes.DATE,
                 description=(
-                        "Filter by datetime of arrival"
-                        "ex. ?date=2024-08-21)"
+                    "Filter by datetime of arrival"
+                    "ex. ?date=2024-08-21)"
                 ),
             ),
         ]
