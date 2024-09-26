@@ -83,6 +83,7 @@ class AuthenticatedTrainApiTest(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
+
     def test_retrieve_train(self):
         res = self.client.get(detail_url(self.train.id))
 
@@ -138,4 +139,7 @@ class AdminTrainApiTest(TestCase):
     def test_delete_train_not_allowed(self):
         res = self.client.delete(detail_url(self.train.id))
 
-        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(
+            res.status_code,
+            status.HTTP_405_METHOD_NOT_ALLOWED
+        )
