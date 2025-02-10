@@ -3,7 +3,7 @@ The Train Station API application implements a system that allows travelers to e
 
 # Installation
 
-- git clone https://github.com/MaxymChyncha/train-station-api
+- git clone https://github.com/mtiunov/trainstation
 - cd train-station-api
 - python -m venv venv
 - venv\Scripts\activate for MacOS/Linux: source venv/bin/activate
